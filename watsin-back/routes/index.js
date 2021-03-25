@@ -26,6 +26,7 @@ router.get('/translate/:text', function (req, res) {
   });
 });
 
+
 router.post('/inputIngredient', function (req, res) {
   console.log(req.body.rcp);
   console.log(req.body.ingredients);
@@ -45,5 +46,19 @@ router.post('/inputIngredient', function (req, res) {
 
 });
 
+
+router.get('/search/:text', (req, res) => {
+
+  var regex = new RegExp(req.params.text)
+  Ingredient.find().where('RCP_NM').regex(regex)
+    .then((searchList) => {
+      res.json({ status: "success", results: searchList });
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ status: "error" })
+    })
+
+})
 
 module.exports = router;
