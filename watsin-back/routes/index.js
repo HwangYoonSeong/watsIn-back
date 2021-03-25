@@ -1,11 +1,11 @@
 var express = require('express');
 var router = express.Router();
+const Ingredient = require('../schemas/ingredient');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
   res.render('index', { title: 'Express' });
 });
-
 
 router.get('/translate/:text', function (req, res) {
   var api_url = 'https://openapi.naver.com/v1/papago/n2mt';
@@ -24,6 +24,25 @@ router.get('/translate/:text', function (req, res) {
       console.log('error = ' + response.statusCode);
     }
   });
+});
+
+router.post('/inputIngredient', function (req, res) {
+  console.log(req.body.rcp);
+  console.log(req.body.ingredients);
+  Ingredient.create({
+    RCP_NM: req.body.rcp,
+    ingredients: req.body.ingredients,
+
+  }, function (err) {
+    if (err) {
+      console.log(err)
+      res.status(500).json({ status: "error" });
+    }
+    else {
+      res.json({ status: "success" });
+    }
+  });
+
 });
 
 
