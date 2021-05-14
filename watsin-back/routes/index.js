@@ -1,11 +1,21 @@
 var express = require('express');
 var router = express.Router();
 const Ingredient = require('../schemas/ingredient');
+const User = require('../schemas/user');
+const IngredientList = require('../schemas/ingredientList');
+
+router.use(express.static('images'));
+router.use('/images', express.static('images/'));
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
+router.get('/test', function (req, res, next) {
   res.render('index', { title: 'Express' });
 });
+
+/* TEST */
+// router.post('/savefilter', function (req, res, next) {
+//   res.json({ status: "success", dummy: req.body.filter });
+// });
 
 router.get('/translate/:text', function (req, res) {
   var api_url = 'https://openapi.naver.com/v1/papago/n2mt';
@@ -47,8 +57,28 @@ router.post('/inputIngredient', function (req, res) {
 });
 
 
-router.get('/search/:text', (req, res) => {
+router.post('/filterBit', function (req, res) {
 
+  console.log(req.body.filterBit);
+  console.log(req.body.uid);
+  User.create({
+    filterBit: req.body.filterBit,
+    uid: req.body.uid,
+  }, function (err) {
+    if (err) {
+      console.log(err)
+      res.status(500).json({ status: "error" });
+    }
+    else {
+      res.json({ status: "success" });
+    }
+  });
+
+});
+
+
+router.get('/search/:text', (req, res) => {
+  console.log(req.params.text)
   var regex = new RegExp(req.params.text)
   Ingredient.find().where('RCP_NM').regex(regex)
     .then((searchList) => {
@@ -60,5 +90,21 @@ router.get('/search/:text', (req, res) => {
     })
 
 })
+
+
+router.get('/ingredientList/:uid', (req, res) => {
+  console.log(req.params.uid)
+  IngredientList.find()
+    .then((IngredientList) => {
+      console.log(IngredientList)
+      res.json({ status: "success", results: IngredientList });
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ status: "error" })
+    })
+
+})
+
 
 module.exports = router;
