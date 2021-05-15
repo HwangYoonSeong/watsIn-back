@@ -3,6 +3,7 @@ var router = express.Router();
 const Ingredient = require('../schemas/ingredient');
 const User = require('../schemas/user');
 const IngredientList = require('../schemas/ingredientList');
+const Posts = require('../schemas/postList');
 
 router.use(express.static('images'));
 router.use('/images', express.static('images/'));
@@ -96,8 +97,19 @@ router.get('/ingredientList/:uid', (req, res) => {
   console.log(req.params.uid)
   IngredientList.find()
     .then((IngredientList) => {
-      console.log(IngredientList)
       res.json({ status: "success", results: IngredientList });
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ status: "error" })
+    })
+
+})
+
+router.get('/postList', (req, res) => {
+  Posts.find()
+    .then((Posts) => {
+      res.json({ status: "success", results: Posts });
     })
     .catch(err => {
       console.log(err);
