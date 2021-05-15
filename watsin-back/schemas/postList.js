@@ -2,9 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const postListSchema = new Schema({
-    id: {
-        type: Number,
-    },
+
     title: {
         type: String,
     },
@@ -13,12 +11,15 @@ const postListSchema = new Schema({
     },
     date: {
         type: String,
+        default: "2021-05-15 1:14"
     },
     writer: {
         type: String,
+        default: "Yooncastle"
     },
     thumbnail: {
         type: String,
+        default: "default.jpg"
     }
 
 }, { versionKey: false });

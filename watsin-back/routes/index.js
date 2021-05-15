@@ -38,24 +38,24 @@ router.get('/translate/:text', function (req, res) {
 });
 
 
-router.post('/inputIngredient', function (req, res) {
-  console.log(req.body.rcp);
-  console.log(req.body.ingredients);
-  Ingredient.create({
-    RCP_NM: req.body.rcp,
-    ingredients: req.body.ingredients,
+// router.post('/inputIngredient', function (req, res) {
+//   console.log(req.body.rcp);
+//   console.log(req.body.ingredients);
+//   Ingredient.create({
+//     RCP_NM: req.body.rcp,
+//     ingredients: req.body.ingredients,
 
-  }, function (err) {
-    if (err) {
-      console.log(err)
-      res.status(500).json({ status: "error" });
-    }
-    else {
-      res.json({ status: "success" });
-    }
-  });
+//   }, function (err) {
+//     if (err) {
+//       console.log(err)
+//       res.status(500).json({ status: "error" });
+//     }
+//     else {
+//       res.json({ status: "success" });
+//     }
+//   });
 
-});
+// });
 
 
 router.post('/filterBit', function (req, res) {
@@ -117,6 +117,42 @@ router.get('/postList', (req, res) => {
     })
 
 })
+
+router.get('/postDetail/:pid', (req, res) => {
+  Posts.find({ _id: req.params.pid })
+    .then((Post) => {
+      res.json({ status: "success", results: Post[0] });
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ status: "error" })
+    })
+
+})
+
+
+router.post('/postInput', function (req, res) {
+  var post = req.body.inputs
+  console.log(req.body.inputs);
+  console.log(req.body.uid);
+  Posts.create({
+    title: post.title,
+    content: post.content,
+    // date:
+    // writer:
+    // thumbnail:
+
+  }, function (err) {
+    if (err) {
+      console.log(err)
+      res.status(500).json({ status: "error" });
+    }
+    else {
+      res.json({ status: "success" });
+    }
+  });
+
+});
 
 
 module.exports = router;
