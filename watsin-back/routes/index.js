@@ -62,18 +62,20 @@ router.post('/filterBit', function (req, res) {
 
   console.log(req.body.filterBit);
   console.log(req.body.uid);
-  User.create({
-    filterBit: req.body.filterBit,
-    uid: req.body.uid,
-  }, function (err) {
-    if (err) {
-      console.log(err)
-      res.status(500).json({ status: "error" });
-    }
-    else {
-      res.json({ status: "success" });
-    }
-  });
+
+  //uid로 사용자 find 후 filterbit 초기화 
+  // User.create({
+  //   filterBit: req.body.filterBit,
+  //   uid: req.body.uid,
+  // }, function (err) {
+  //   if (err) {
+  //     console.log(err)
+  //     res.status(500).json({ status: "error" });
+  //   }
+  //   else {
+  //     res.json({ status: "success" });
+  //   }
+  // });
 
 });
 
@@ -142,6 +144,26 @@ router.post('/postInput', function (req, res) {
     // writer:
     // thumbnail:
 
+  }, function (err) {
+    if (err) {
+      console.log(err)
+      res.status(500).json({ status: "error" });
+    }
+    else {
+      res.json({ status: "success" });
+    }
+  });
+
+});
+
+
+router.post('/userInput', function (req, res) {
+
+  //uid로 처음 사용하는 user인지 아닌지 판별해서 create 
+  User.create({
+    uid: req.body.uid,
+    email: req.body.email,
+    userImg: req.body.userImg
   }, function (err) {
     if (err) {
       console.log(err)
